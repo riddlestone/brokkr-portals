@@ -13,5 +13,6 @@ class ModuleTest extends TestCase
         $config = $module->getConfig();
         $this->assertIsArray($config);
         $this->assertArrayHasKey('portals', $config);
+        $this->assertArrayHasKey('portal_config_providers', $config);
     }
 }

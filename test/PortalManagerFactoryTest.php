@@ -5,6 +5,7 @@ namespace Riddlestone\ZF\Portals\Test;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use PHPUnit\Framework\TestCase;
+use Riddlestone\Brokkr\Portals\DefaultPortalConfigProvider;
 use Riddlestone\Brokkr\Portals\PortalManager;
 use Riddlestone\Brokkr\Portals\PortalManagerFactory;
 use stdClass;
@@ -26,12 +27,18 @@ class PortalManagerFactoryTest extends TestCase
                 switch ($id) {
                     case 'Config':
                         return [
-                            'portals' => [
-                                'main' => [
-                                    'foo' => 'bar',
-                                ],
+                            'portal_config_providers' => [
+                                DefaultPortalConfigProvider::class,
                             ],
                         ];
+                    case DefaultPortalConfigProvider::class:
+                        $provider = new DefaultPortalConfigProvider();
+                        $provider->setPortalConfig([
+                            'main' => [
+                                'foo' => 'bar',
+                            ],
+                        ]);
+                        return $provider;
                     default:
                         throw new ServiceNotFoundException();
                 }

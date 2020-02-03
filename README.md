@@ -11,8 +11,10 @@ return [
     'portals' => [
         'main' => [
             'layout' => 'main.layout',
-            'resources' => [
+            'css' => [
                 __DIR__ . '/../css/styles.css',
+            ],
+            'js' => [
                 __DIR__ . '/../js/scripts.js',
             ],
         ],
@@ -28,12 +30,27 @@ Alternatively, you can merge new configuration in manually if needed:
 $portalManager->mergeConfig(
     [
         'main' => [
-            'resources' => [
+            'css' => [
                 'another.css',
             ],
         ],
     ]
 );
+```
+
+Portals also supports lazy configuration loading through PortalConfigProviders:
+
+```php
+return [
+    'portal_config_providers' => [
+        'My\\Portal\\Config\\Provider',
+    ],
+    'service_manager' => [
+        'factories' => [
+            'My\\Portal\\Config\\Provider' => 'My\\Portal\\Config\\ProviderFactory',
+        ],
+    ],
+];
 ```
 
 ## Getting the Portal Manager
@@ -55,8 +72,8 @@ $portals = $portalManager->getPortalNames();
 $portal = $portalManager->getCurrentPortalName();
 
 # get the config for a portal
-$portalConfig = $portalManager->getPortalConfig('main');
+$portalConfig = $portalManager->getPortalConfig('main', 'css');
 
 # get the config for the current portal
-$portalConfig = $portalManager->getCurrentPortalConfig();
+$portalConfig = $portalManager->getCurrentPortalConfig('css');
 ```

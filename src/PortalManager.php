@@ -4,56 +4,44 @@
 namespace Riddlestone\Brokkr\Portals;
 
 
+use Laminas\Config\Config;
+
 class PortalManager
 {
-    /**
-     * @var array[]
-     */
-    protected $config = [
-        'main' => [],
-    ];
-
     /**
      * @var string
      */
     protected $currentPortalName = 'main';
 
     /**
-     * PortalManager constructor.
-     *
-     * @param array|null $config
+     * @var PortalConfigProviderInterface[]
      */
-    public function __construct(?array $config = null)
-    {
-        if ($config !== null) {
-            $this->mergeConfig($config);
-        }
-    }
+    protected $portalConfigProviders = [];
 
     /**
-     * Merge new configuration into portal configs.
-     *
-     * The top level of this array should be the portal names, e.g.
-     * [
-     *     'main' => [...],
-     *     'admin' => [...],
-     * ]
-     *
-     * @param array[] $config
+     * @param PortalConfigProviderInterface $configPortalProvider
      */
-    public function mergeConfig(array $config): void
+    public function addPortalConfigProvider(PortalConfigProviderInterface $configPortalProvider)
     {
-        $this->config = array_merge_recursive($this->config, $config);
+        $this->portalConfigProviders[] = $configPortalProvider;
     }
 
     /**
      * Get a list of the configured portals
      *
-     * @return array
+     * @return string[]
      */
     public function getPortalNames(): array
     {
-        return array_keys($this->config);
+        $portals = [];
+        foreach($this->portalConfigProviders as $provider) {
+            foreach($provider->getPortalNames() as $portalName) {
+                if(!in_array($portalName, $portals)) {
+                    $portals[] = $portalName;
+                }
+            }
+        }
+        return $portals;
     }
 
     /**
@@ -70,13 +58,18 @@ class PortalManager
      * Get the configuration for the named portal
      *
      * @param string $name
+     * @param string|null $configKey
      * @return array
      */
-    public function getPortalConfig(string $name): array
+    public function getPortalConfig(string $name, ?string $configKey = null): array
     {
-        return array_key_exists($name, $this->config)
-            ? $this->config[$name]
-            : [];
+        $config = new Config([]);
+        foreach($this->portalConfigProviders as $provider) {
+            if ($provider->hasConfiguration($name, $configKey)) {
+                $config->merge(new Config($provider->getConfiguration($name, $configKey)));
+            }
+        }
+        return $config->toArray();
     }
 
     /**
@@ -92,10 +85,11 @@ class PortalManager
     /**
      * Get the configuration for the currently selected portal
      *
+     * @param string|null $configKey
      * @return array
      */
-    public function getCurrentPortalConfig(): array
+    public function getCurrentPortalConfig(?string $configKey = null): array
     {
-        return $this->getPortalConfig($this->currentPortalName);
+        return $this->getPortalConfig($this->currentPortalName, $configKey);
     }
 }
