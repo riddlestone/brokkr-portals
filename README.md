@@ -22,22 +22,6 @@ return [
 ];
 ```
 
-Alternatively, you can merge new configuration in manually if needed:
-
-```php
-/** @var \Riddlestone\Brokkr\Portals\PortalManager $portalManager */
-
-$portalManager->mergeConfig(
-    [
-        'main' => [
-            'css' => [
-                'another.css',
-            ],
-        ],
-    ]
-);
-```
-
 Portals also supports lazy configuration loading through PortalConfigProviders:
 
 ```php
