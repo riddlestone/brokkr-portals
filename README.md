@@ -1,6 +1,6 @@
-# [![Riddlestone](https://avatars0.githubusercontent.com/u/57593244?s=30&v=4)](https://github.com/riddlestone) ZF-Portals
+# [![Riddlestone](https://avatars0.githubusercontent.com/u/57593244?s=30&v=4)](https://github.com/riddlestone) Brokkr-Portals
 
-A module to pull configuration together for portals, such as a public portal, an admin portal, etc.
+A [Laminas](https://github.com/laminas) module to pull configuration together for portals, such as a public portal, an admin portal, etc.
 
 ## Adding Configuration
 
@@ -23,7 +23,7 @@ return [
 Alternatively, you can merge new configuration in manually if needed:
 
 ```php
-/** @var \Riddlestone\ZF\Portals\PortalManager $portalManager */
+/** @var \Riddlestone\Brokkr\Portals\PortalManager $portalManager */
 
 $portalManager->mergeConfig(
     [
@@ -38,15 +38,15 @@ $portalManager->mergeConfig(
 
 ## Getting the Portal Manager
 ```php
-/** @var \Zend\ServiceManager\ServiceManager $serviceManager */
+/** @var \Laminas\ServiceManager\ServiceManager $serviceManager */
 
-$portalManager = $serviceManager->get(\Riddlestone\ZF\Portals\PortalManager::class);
+$portalManager = $serviceManager->get(\Riddlestone\Brokkr\Portals\PortalManager::class);
 ```
 
 ## Getting Configuration
 
 ```php
-/** @var \Riddlestone\ZF\Portals\PortalManager $portalManager */
+/** @var \Riddlestone\Brokkr\Portals\PortalManager $portalManager */
 
 # get a list of portals
 $portals = $portalManager->getPortalNames();

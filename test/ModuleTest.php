@@ -1,9 +1,9 @@
 <?php
 
-namespace Riddlestone\ZF\Portals\Test;
+namespace Riddlestone\Brokkr\Portals\Test;
 
 use PHPUnit\Framework\TestCase;
-use Riddlestone\ZF\Portals\Module;
+use Riddlestone\Brokkr\Portals\Module;
 
 class ModuleTest extends TestCase
 {
@@ -12,6 +12,6 @@ class ModuleTest extends TestCase
         $module = new Module();
         $config = $module->getConfig();
         $this->assertIsArray($config);
-        $this->assertArrayHasKey('main', $config);
+        $this->assertArrayHasKey('portals', $config);
     }
 }

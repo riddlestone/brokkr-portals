@@ -1,8 +1,8 @@
 <?php
 
-namespace Riddlestone\ZF\Portals;
+namespace Riddlestone\Brokkr\Portals;
 
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 
 class Module implements ConfigProviderInterface
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Riddlestone\ZF\Portals;
+namespace Riddlestone\Brokkr\Portals;
 
 
 class PortalManager

@@ -1,9 +1,9 @@
 <?php
 
-namespace Riddlestone\ZF\Portals\Test;
+namespace Riddlestone\Brokkr\Portals\Test;
 
 use PHPUnit\Framework\TestCase;
-use Riddlestone\ZF\Portals\PortalManager;
+use Riddlestone\Brokkr\Portals\PortalManager;
 
 class PortalManagerTest extends TestCase
 {

@@ -2,22 +2,21 @@
 
 namespace Riddlestone\ZF\Portals\Test;
 
-use Exception;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use PHPUnit\Framework\TestCase;
-use Riddlestone\ZF\Portals\PortalManager;
-use Riddlestone\ZF\Portals\PortalManagerFactory;
+use Riddlestone\Brokkr\Portals\PortalManager;
+use Riddlestone\Brokkr\Portals\PortalManagerFactory;
 use stdClass;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 class PortalManagerFactoryTest extends TestCase
 {
 
     /**
      * @throws ContainerException
-     * @covers \Riddlestone\ZF\Portals\PortalManagerFactory::__invoke
+     * @covers \Riddlestone\Brokkr\Portals\PortalManagerFactory::__invoke
      */
     public function test__invoke()
     {

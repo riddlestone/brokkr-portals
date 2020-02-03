@@ -1,27 +1,28 @@
 {
-    "name": "riddlestone/zf-portals",
-    "description": "A module to pull configuration together for portals, such as a public portal, an admin portal, etc.",
+    "name": "riddlestone/brokkr-portals",
+    "description": "A Laminas module to pull configuration together for portals, such as a public portal, an admin portal, etc.",
     "keywords": [
         "config",
-        "zf"
+        "laminas",
+        "brokkr"
     ],
-    "homepage": "https://github.com/riddlestone/zf-portals",
+    "homepage": "https://github.com/riddlestone/brokkr-portals",
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Riddlestone\\ZF\\Portals\\": "src/"
+            "Riddlestone\\Brokkr\\Portals\\": "src/"
         }
     },
     "require": {
         "php": "^7.2",
         "container-interop/container-interop": "^1.2",
-        "zendframework/zend-component-installer": "^1.0 || ^2.1",
-        "zendframework/zend-modulemanager": "^2.8",
-        "zendframework/zend-servicemanager": "^3.4"
+        "laminas/laminas-component-installer": "^1.0 || ^2.1",
+        "laminas/laminas-modulemanager": "^2.8",
+        "laminas/laminas-servicemanager": "^3.4"
     },
     "autoload-dev": {
         "psr-4": {
-            "Riddlestone\\ZF\\Portals\\Test\\": "test/"
+            "Riddlestone\\Brokkr\\Portals\\Test\\": "test/"
         }
     },
     "require-dev": {
@@ -29,7 +30,7 @@
     },
     "extra": {
         "zf": {
-            "component": "Riddlestone\\ZF\\Portals"
+            "component": "Riddlestone\\Brokkr\\Portals"
         }
     },
     "scripts": {
