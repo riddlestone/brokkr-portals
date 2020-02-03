@@ -8,6 +8,9 @@ use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotLoadedException;
 
 class DefaultPortalConfigProviderTest extends TestCase
 {
+    /**
+     * @throws ConfigurationNotLoadedException
+     */
     public function testDefaultPortalConfigProvider()
     {
         $provider = new DefaultPortalConfigProvider();
