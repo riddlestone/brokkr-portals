@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
     <testsuites>
-        <testsuite name="ZF-Portals Test Suite">
+        <testsuite name="Brokkr-Portals Test Suite">
             <directory>./test</directory>
         </testsuite>
     </testsuites>
