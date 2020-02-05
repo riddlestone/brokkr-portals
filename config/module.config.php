@@ -10,6 +10,7 @@ return [
     'service_manager' => [
         'factories' => [
             DefaultPortalConfigProvider::class => DefaultPortalConfigProviderFactory::class,
+            PortalManager::class => PortalManagerFactory::class,
         ],
     ],
 ];
