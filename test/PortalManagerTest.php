@@ -3,56 +3,47 @@
 namespace Riddlestone\Brokkr\Portals\Test;
 
 use PHPUnit\Framework\TestCase;
+use Riddlestone\Brokkr\Portals\PortalConfigProviderInterface;
 use Riddlestone\Brokkr\Portals\PortalManager;
 
 class PortalManagerTest extends TestCase
 {
-    public function testMergeConfig()
-    {
-        $portalManager = new PortalManager(
-            [
-                'main' => [
-                    'letters' => ['a', 'b', 'c'],
-                ],
-            ]
-        );
-        $this->assertEquals(['letters' => ['a', 'b', 'c']], $portalManager->getCurrentPortalConfig());
-        $portalManager->mergeConfig(
-            [
-                'main' => [
-                    'letters' => ['d', 'e'],
-                    'numbers' => [1, 2, 3],
-                ],
-            ]
-        );
-        $this->assertEquals(
-            ['letters' => ['a', 'b', 'c', 'd', 'e'], 'numbers' => [1, 2, 3]],
-            $portalManager->getCurrentPortalConfig()
-        );
-    }
-
-    public function testGetCurrentPortalConfig()
-    {
-        $portalManager = new PortalManager(
-            [
-                'main' => ['foo' => true],
-                'admin' => ['foo' => false],
-            ]
-        );
-        $this->assertEquals(['foo' => true], $portalManager->getCurrentPortalConfig());
-        $portalManager->setCurrentPortalName('admin');
-        $this->assertEquals(['foo' => false], $portalManager->getCurrentPortalConfig());
-    }
-
     public function testGetPortals()
     {
-        $portalManager = new PortalManager(
-            [
-                'main' => [],
-                'admin' => [],
-            ]
-        );
-        $this->assertEquals(['main', 'admin'], $portalManager->getPortalNames());
+        $provider = $this->createMock(PortalConfigProviderInterface::class);
+        $provider->method('getPortalNames')->willReturn(['main', 'admin']);
+
+        $provider2 = $this->createMock(PortalConfigProviderInterface::class);
+        $provider2->method('getPortalNames')->willReturn(['main', 'special']);
+
+        $portalManager = new PortalManager();
+        $portalManager->addPortalConfigProvider($provider);
+        $portalManager->addPortalConfigProvider($provider2);
+
+        $this->assertEquals(['main', 'admin', 'special'], $portalManager->getPortalNames());
+    }
+
+    public function testGetPortalConfig()
+    {
+        $portalManager = new PortalManager();
+
+        $provider = $this->createMock(PortalConfigProviderInterface::class);
+        $provider->method('getPortalNames')->willReturn(['main', 'admin']);
+        $provider->method('hasConfiguration')->with('main', null)->willReturn(true);
+        $provider->method('getConfiguration')->with('main', null)->willReturn(['foo' => ['bar'], 'bar' => 'baz']);
+
+        $provider2 = $this->createMock(PortalConfigProviderInterface::class);
+        $provider2->method('getPortalNames')->willReturn(['admin', 'special']);
+        $provider2->method('hasConfiguration')->with('main', null)->willReturn(true);
+        $provider2->method('getConfiguration')->with('main', null)->willReturn(['foo' => ['baz'], 'bar' => 'meh']);
+
+        $portalManager->addPortalConfigProvider($provider);
+        $portalManager->addPortalConfigProvider($provider2);
+
+        $portalManager->setCurrentPortalName('main');
+        $this->assertEquals(['foo' => ['bar', 'baz'], 'bar' => 'meh'], $portalManager->getCurrentPortalConfig());
+
+        $this->assertEquals(['foo' => ['bar', 'baz'], 'bar' => 'meh'], $portalManager->getCurrentPortalConfig());
     }
 
     public function testSetPortal()
@@ -61,17 +52,5 @@ class PortalManagerTest extends TestCase
         $this->assertEquals('main', $portalManager->getCurrentPortalName());
         $portalManager->setCurrentPortalName('admin');
         $this->assertEquals('admin', $portalManager->getCurrentPortalName());
-    }
-
-    public function testGetPortalConfig()
-    {
-        $portalManager = new PortalManager(
-            [
-                'main' => ['foo' => true],
-                'admin' => ['foo' => false],
-            ]
-        );
-        $this->assertEquals(['foo' => true], $portalManager->getPortalConfig('main'));
-        $this->assertEquals(['foo' => false], $portalManager->getPortalConfig('admin'));
     }
 }
