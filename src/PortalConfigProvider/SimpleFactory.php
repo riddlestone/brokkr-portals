@@ -1,12 +1,12 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals;
+namespace Riddlestone\Brokkr\Portals\PortalConfigProvider;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class DefaultPortalConfigProviderFactory implements FactoryInterface
+class SimpleFactory implements FactoryInterface
 {
     /**
      * @inheritDoc
@@ -14,8 +14,8 @@ class DefaultPortalConfigProviderFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $provider = new $requestedName();
-        if(!($provider instanceof DefaultPortalConfigProvider)) {
-            throw new ServiceNotCreatedException($requestedName . ' not an instance of ' . DefaultPortalConfigProvider::class);
+        if(!($provider instanceof Simple)) {
+            throw new ServiceNotCreatedException($requestedName . ' not an instance of ' . Simple::class);
         }
         $provider->setPortalConfig($container->get('Config')['portals']);
         return $provider;

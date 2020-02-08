@@ -5,11 +5,11 @@ namespace Riddlestone\Brokkr\Portals;
 return [
     'portals' => [],
     'portal_config_providers' => [
-        DefaultPortalConfigProvider::class,
+        PortalConfigProvider\Simple::class,
     ],
     'service_manager' => [
         'factories' => [
-            DefaultPortalConfigProvider::class => DefaultPortalConfigProviderFactory::class,
+            PortalConfigProvider\Simple::class => PortalConfigProvider\SimpleFactory::class,
             PortalManager::class => PortalManagerFactory::class,
         ],
     ],
