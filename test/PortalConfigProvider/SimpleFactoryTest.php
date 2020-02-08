@@ -7,12 +7,12 @@ use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use PHPUnit\Framework\TestCase;
-use Riddlestone\Brokkr\Portals\DefaultPortalConfigProvider;
-use Riddlestone\Brokkr\Portals\DefaultPortalConfigProviderFactory;
+use Riddlestone\Brokkr\Portals\PortalConfigProvider\Simple;
+use Riddlestone\Brokkr\Portals\PortalConfigProvider\SimpleFactory;
 use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotLoadedException;
 use stdClass;
 
-class DefaultPortalConfigProviderFactoryTest extends TestCase
+class SimpleFactoryTest extends TestCase
 {
     /**
      * @throws ContainerException
@@ -39,11 +39,11 @@ class DefaultPortalConfigProviderFactoryTest extends TestCase
                         throw new ServiceNotFoundException();
                 }
             });
-        $factory = new DefaultPortalConfigProviderFactory();
+        $factory = new SimpleFactory();
 
-        /** @var DefaultPortalConfigProvider $provider */
-        $provider = $factory($container, DefaultPortalConfigProvider::class);
-        $this->assertInstanceOf(DefaultPortalConfigProvider::class, $provider);
+        /** @var Simple $provider */
+        $provider = $factory($container, Simple::class);
+        $this->assertInstanceOf(Simple::class, $provider);
         $this->assertEquals(['main', 'admin'], $provider->getPortalNames());
 
         try {

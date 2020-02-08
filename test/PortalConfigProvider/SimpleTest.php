@@ -3,17 +3,17 @@
 namespace Riddlestone\Brokkr\Portals\Test;
 
 use PHPUnit\Framework\TestCase;
-use Riddlestone\Brokkr\Portals\DefaultPortalConfigProvider;
+use Riddlestone\Brokkr\Portals\PortalConfigProvider\Simple;
 use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotLoadedException;
 
-class DefaultPortalConfigProviderTest extends TestCase
+class SimpleTest extends TestCase
 {
     /**
      * @throws ConfigurationNotLoadedException
      */
     public function testDefaultPortalConfigProvider()
     {
-        $provider = new DefaultPortalConfigProvider();
+        $provider = new Simple();
         try {
             $provider->getConfiguration('main');
             $this->fail('Allowed null config');
