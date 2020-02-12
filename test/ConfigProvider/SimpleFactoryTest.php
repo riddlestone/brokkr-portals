@@ -1,14 +1,14 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test;
+namespace Riddlestone\Brokkr\Portals\Test\ConfigProvider;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use PHPUnit\Framework\TestCase;
-use Riddlestone\Brokkr\Portals\PortalConfigProvider\Simple;
-use Riddlestone\Brokkr\Portals\PortalConfigProvider\SimpleFactory;
+use Riddlestone\Brokkr\Portals\ConfigProvider\Simple;
+use Riddlestone\Brokkr\Portals\ConfigProvider\SimpleFactory;
 use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotLoadedException;
 use stdClass;
 
@@ -18,7 +18,7 @@ class SimpleFactoryTest extends TestCase
      * @throws ContainerException
      * @throws ConfigurationNotLoadedException
      */
-    public function testDefaultPortalConfigProviderFactory()
+    public function testFactory()
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('get')

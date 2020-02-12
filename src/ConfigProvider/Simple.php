@@ -1,11 +1,11 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\PortalConfigProvider;
+namespace Riddlestone\Brokkr\Portals\ConfigProvider;
 
 use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotLoadedException;
-use Riddlestone\Brokkr\Portals\PortalConfigProviderInterface;
+use Riddlestone\Brokkr\Portals\ConfigProviderInterface;
 
-class Simple implements PortalConfigProviderInterface
+class Simple implements ConfigProviderInterface
 {
     /**
      * @var array|null

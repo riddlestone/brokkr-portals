@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Riddlestone\Brokkr\Portals;
-
 
 use Laminas\Config\Config;
 
@@ -14,14 +12,14 @@ class PortalManager
     protected $currentPortalName = 'main';
 
     /**
-     * @var PortalConfigProviderInterface[]
+     * @var ConfigProviderInterface[]
      */
     protected $portalConfigProviders = [];
 
     /**
-     * @param PortalConfigProviderInterface $configPortalProvider
+     * @param ConfigProviderInterface $configPortalProvider
      */
-    public function addPortalConfigProvider(PortalConfigProviderInterface $configPortalProvider)
+    public function addPortalConfigProvider(ConfigProviderInterface $configPortalProvider)
     {
         $this->portalConfigProviders[] = $configPortalProvider;
     }

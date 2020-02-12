@@ -3,17 +3,17 @@
 namespace Riddlestone\Brokkr\Portals\Test;
 
 use PHPUnit\Framework\TestCase;
-use Riddlestone\Brokkr\Portals\PortalConfigProviderInterface;
+use Riddlestone\Brokkr\Portals\ConfigProviderInterface;
 use Riddlestone\Brokkr\Portals\PortalManager;
 
 class PortalManagerTest extends TestCase
 {
     public function testGetPortals()
     {
-        $provider = $this->createMock(PortalConfigProviderInterface::class);
+        $provider = $this->createMock(ConfigProviderInterface::class);
         $provider->method('getPortalNames')->willReturn(['main', 'admin']);
 
-        $provider2 = $this->createMock(PortalConfigProviderInterface::class);
+        $provider2 = $this->createMock(ConfigProviderInterface::class);
         $provider2->method('getPortalNames')->willReturn(['main', 'special']);
 
         $portalManager = new PortalManager();
@@ -27,7 +27,7 @@ class PortalManagerTest extends TestCase
     {
         $portalManager = new PortalManager();
 
-        $provider1 = $this->createMock(PortalConfigProviderInterface::class);
+        $provider1 = $this->createMock(ConfigProviderInterface::class);
         $provider1->method('getPortalNames')->willReturn(['main']);
         $provider1->method('hasConfiguration')
             ->willReturnCallback(function ($portalName, $key) {
@@ -58,7 +58,7 @@ class PortalManagerTest extends TestCase
                 return [];
             });
 
-        $provider2 = $this->createMock(PortalConfigProviderInterface::class);
+        $provider2 = $this->createMock(ConfigProviderInterface::class);
         $provider2->method('getPortalNames')->willReturn(['main']);
         $provider2->method('hasConfiguration')
             ->willReturnCallback(function ($portalName, $key) {
