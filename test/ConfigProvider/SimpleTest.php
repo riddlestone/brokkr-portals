@@ -1,9 +1,9 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test;
+namespace Riddlestone\Brokkr\Portals\Test\ConfigProvider;
 
 use PHPUnit\Framework\TestCase;
-use Riddlestone\Brokkr\Portals\PortalConfigProvider\Simple;
+use Riddlestone\Brokkr\Portals\ConfigProvider\Simple;
 use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotLoadedException;
 
 class SimpleTest extends TestCase

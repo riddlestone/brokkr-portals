@@ -1,6 +1,6 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\PortalConfigProvider;
+namespace Riddlestone\Brokkr\Portals\ConfigProvider;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;

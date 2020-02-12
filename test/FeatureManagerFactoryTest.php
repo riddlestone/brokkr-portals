@@ -5,14 +5,14 @@ namespace Riddlestone\ZF\Portals\Test;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use PHPUnit\Framework\TestCase;
-use Riddlestone\Brokkr\Portals\ConfigProviderInterface;
-use Riddlestone\Brokkr\Portals\PortalManager;
-use Riddlestone\Brokkr\Portals\PortalManagerFactory;
+use Riddlestone\Brokkr\Portals\FeatureManager;
+use Riddlestone\Brokkr\Portals\FeatureManagerFactory;
+use Riddlestone\Brokkr\Portals\FeatureProviderInterface;
 use stdClass;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
-class PortalManagerFactoryTest extends TestCase
+class FeatureManagerFactoryTest extends TestCase
 {
 
     /**
@@ -26,20 +26,20 @@ class PortalManagerFactoryTest extends TestCase
                 switch ($id) {
                     case 'Config':
                         return [
-                            'portal_config_providers' => [
-                                'SomePortalConfigProvider',
+                            'portal_feature_providers' => [
+                                'SomePortalFeatureProvider',
                             ],
                         ];
-                    case 'SomePortalConfigProvider':
-                        return $this->createMock(ConfigProviderInterface::class);
+                    case 'SomePortalFeatureProvider':
+                        return $this->createMock(FeatureProviderInterface::class);
                     default:
                         throw new ServiceNotFoundException();
                 }
             });
-        $factory = new PortalManagerFactory();
+        $factory = new FeatureManagerFactory();
 
-        $portalManager = $factory($container, PortalManager::class);
-        $this->assertInstanceOf(PortalManager::class, $portalManager);
+        $featureManager = $factory($container, FeatureManager::class);
+        $this->assertInstanceOf(FeatureManager::class, $featureManager);
 
         try {
             $factory($container, stdClass::class);

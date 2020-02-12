@@ -2,7 +2,7 @@
 
 namespace Riddlestone\Brokkr\Portals;
 
-interface PortalConfigProviderInterface
+interface ConfigProviderInterface
 {
     /**
      * Get the portals this provider has configuration for
