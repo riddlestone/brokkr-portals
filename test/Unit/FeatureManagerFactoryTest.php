@@ -26,12 +26,14 @@ class FeatureManagerFactoryTest extends TestCase
                 switch ($id) {
                     case 'Config':
                         return [
-                            'portal_feature_providers' => [
-                                'SomePortalFeatureProvider',
+                            'portal_feature_manager' => [
+                                'factories' => [
+                                    'SomePortalFeatureProvider' => function(){
+                                        return $this->createMock(FeatureProviderInterface::class);
+                                    },
+                                ],
                             ],
                         ];
-                    case 'SomePortalFeatureProvider':
-                        return $this->createMock(FeatureProviderInterface::class);
                     default:
                         throw new ServiceNotFoundException();
                 }

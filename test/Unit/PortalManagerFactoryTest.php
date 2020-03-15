@@ -26,12 +26,14 @@ class PortalManagerFactoryTest extends TestCase
                 switch ($id) {
                     case 'Config':
                         return [
-                            'portal_config_providers' => [
-                                'SomePortalConfigProvider',
+                            'portal_manager' => [
+                                'factories' => [
+                                    'SomePortalConfigProvider' => function(){
+                                        return $this->createMock(ConfigProviderInterface::class);
+                                    },
+                                ],
                             ],
                         ];
-                    case 'SomePortalConfigProvider':
-                        return $this->createMock(ConfigProviderInterface::class);
                     default:
                         throw new ServiceNotFoundException();
                 }

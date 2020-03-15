@@ -1,6 +1,6 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test\FeatureProvider;
+namespace Riddlestone\Brokkr\Portals\Test\Unit\FeatureProvider;
 
 use PHPUnit\Framework\TestCase;
 use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotFoundException;

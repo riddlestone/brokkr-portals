@@ -1,14 +1,15 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test\ConfigProvider;
+namespace Riddlestone\Brokkr\Portals\Test\Unit\FeatureProvider;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use PHPUnit\Framework\TestCase;
-use Riddlestone\Brokkr\Portals\ConfigProvider\Simple;
-use Riddlestone\Brokkr\Portals\ConfigProvider\SimpleFactory;
+use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotFoundException;
+use Riddlestone\Brokkr\Portals\FeatureProvider\Simple;
+use Riddlestone\Brokkr\Portals\FeatureProvider\SimpleFactory;
 use Riddlestone\Brokkr\Portals\Exception\ConfigurationNotLoadedException;
 use stdClass;
 
@@ -17,8 +18,9 @@ class SimpleFactoryTest extends TestCase
     /**
      * @throws ContainerException
      * @throws ConfigurationNotLoadedException
+     * @throws ConfigurationNotFoundException
      */
-    public function testFactory()
+    public function testDefaultPortalConfigProviderFactory()
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('get')
@@ -26,12 +28,13 @@ class SimpleFactoryTest extends TestCase
                 switch ($id) {
                     case 'Config':
                         return [
-                            'portals' => [
-                                'main' => [
-                                    'foo' => 'bar',
+                            'portal_features' => [
+                                'foo' => [
+                                    'css' => ['foo.css'],
+                                    'js' => ['foo.js'],
                                 ],
-                                'admin' => [
-                                    'foo' => 'baz',
+                                'bar' => [
+                                    'css' => ['bar.css'],
                                 ],
                             ],
                         ];
@@ -44,7 +47,8 @@ class SimpleFactoryTest extends TestCase
         /** @var Simple $provider */
         $provider = $factory($container, Simple::class);
         $this->assertInstanceOf(Simple::class, $provider);
-        $this->assertEquals(['main', 'admin'], $provider->getPortalNames());
+        $this->assertEquals(['css' => ['foo.css'], 'js' => ['foo.js']], $provider->getFeature('foo'));
+        $this->assertEquals(['foo.css'], $provider->getFeature('foo', 'css'));
 
         try {
             $factory($container, stdClass::class);

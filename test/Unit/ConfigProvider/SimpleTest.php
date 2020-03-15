@@ -1,6 +1,6 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test\ConfigProvider;
+namespace Riddlestone\Brokkr\Portals\Test\Unit\ConfigProvider;
 
 use PHPUnit\Framework\TestCase;
 use Riddlestone\Brokkr\Portals\ConfigProvider\Simple;

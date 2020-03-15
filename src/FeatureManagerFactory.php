@@ -9,18 +9,13 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class FeatureManagerFactory implements FactoryInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $manager = new $requestedName();
-        if(!($manager instanceof FeatureManager)) {
+        if(!is_a($requestedName, FeatureManager::class, true)) {
             throw new ServiceNotCreatedException($requestedName . ' is not an instance of ' . FeatureManager::class);
         }
-        foreach($container->get('Config')['portal_feature_providers'] as $providerName) {
-            $provider = $container->get($providerName);
-            $manager->addProvider($provider);
-        }
-        return $manager;
+        return new $requestedName($container, $container->get('Config')['portal_feature_manager']);
     }
 }
