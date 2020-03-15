@@ -1,6 +1,6 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test;
+namespace Riddlestone\Brokkr\Portals\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Riddlestone\Brokkr\Portals\Module;
@@ -13,6 +13,8 @@ class ModuleTest extends TestCase
         $config = $module->getConfig();
         $this->assertIsArray($config);
         $this->assertArrayHasKey('portals', $config);
-        $this->assertArrayHasKey('portal_config_providers', $config);
+        $this->assertArrayHasKey('portal_manager', $config);
+        $this->assertArrayHasKey('portal_features', $config);
+        $this->assertArrayHasKey('portal_feature_manager', $config);
     }
 }

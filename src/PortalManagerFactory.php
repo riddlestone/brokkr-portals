@@ -24,15 +24,9 @@ class PortalManagerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $manager = new $requestedName();
-        if (! ($manager instanceof PortalManager)) {
+        if (!(is_a($requestedName, PortalManager::class, true))) {
             throw new ServiceNotCreatedException($requestedName . ' not an instance of ' . PortalManager::class);
         }
-
-        foreach($container->get('Config')['portal_config_providers'] as $provider) {
-            $manager->addPortalConfigProvider($container->get($provider));
-        }
-
-        return $manager;
+        return new $requestedName($container, $container->get('Config')['portal_manager']);
     }
 }

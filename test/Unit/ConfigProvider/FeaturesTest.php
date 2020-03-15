@@ -1,6 +1,6 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test\ConfigProvider;
+namespace Riddlestone\Brokkr\Portals\Test\Unit\ConfigProvider;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,6 @@ use Riddlestone\Brokkr\Portals\PortalManager;
 
 class FeaturesTest extends TestCase
 {
-
     public function testGetPortalNames()
     {
         $provider = new Features();
@@ -81,9 +80,9 @@ class FeaturesTest extends TestCase
 
         $featureManager = $this->createMock(FeatureManager::class);
         $featureManager->method('hasFeature')->willReturnCallback(function ($feature, $configKey) {
-            switch($feature) {
+            switch ($feature) {
                 case 'foo':
-                    switch($configKey) {
+                    switch ($configKey) {
                         case 'css':
                         case 'js':
                         case null:
@@ -92,7 +91,7 @@ class FeaturesTest extends TestCase
                             return false;
                     }
                 case 'bar':
-                    switch($configKey) {
+                    switch ($configKey) {
                         case 'css':
                         case null:
                             return true;
@@ -104,9 +103,9 @@ class FeaturesTest extends TestCase
             }
         });
         $featureManager->method('getFeature')->willReturnCallback(function ($feature, $configKey) {
-            switch($feature) {
+            switch ($feature) {
                 case 'foo':
-                    switch($configKey) {
+                    switch ($configKey) {
                         case 'css':
                             return ['foo.css'];
                         case 'js':
@@ -120,7 +119,7 @@ class FeaturesTest extends TestCase
                             throw new Exception('Nope');
                     }
                 case 'bar':
-                    switch($configKey) {
+                    switch ($configKey) {
                         case 'css':
                             return ['bar.css'];
                         case null:
@@ -138,6 +137,16 @@ class FeaturesTest extends TestCase
 
         $this->assertTrue($provider->hasConfiguration('main'));
         $this->assertTrue($provider->hasConfiguration('main', 'css'));
+        $this->assertFalse($provider->hasConfiguration('main', 'images'));
         $this->assertEquals(['css' => ['foo.css', 'bar.css'], 'js' => ['foo.js']], $provider->getConfiguration('main'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRecursiveFeatures()
+    {
+        $features = new Features();
+        $this->assertEquals([], $features->getConfiguration('main', 'features'));
     }
 }

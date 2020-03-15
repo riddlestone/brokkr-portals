@@ -26,16 +26,47 @@ Portals also supports lazy configuration loading through PortalConfigProviders:
 
 ```php
 return [
-    'portal_config_providers' => [
-        'My\\Portal\\Config\\Provider',
-    ],
-    'service_manager' => [
+    'portal_manager' => [
+        'provider_names' => [
+            'My\\Portal\\Config\\Provider',
+        ],
         'factories' => [
             'My\\Portal\\Config\\Provider' => 'My\\Portal\\Config\\ProviderFactory',
         ],
     ],
 ];
 ```
+
+## Portal Features
+
+Features allow you to group portal configuration together, and assign it to a portal separately. This might be usefuuul
+if some modular functionality requires multiple css/js files, but the module doesn't know which portals it will be used
+in:
+
+```php
+return [
+    'portals' => [
+        'main' => [
+            'features' => [
+                'some-functionality',
+            ],
+        ],
+    ],
+    'portal_features' => [
+        'some-functionality' => [
+            'css' => [
+                __DIR__ . '/../css/styles.css',
+            ],
+            'js' => [
+                __DIR__ . '/../js/scripts.js',
+            ],
+        ],
+    ],
+];
+```
+
+Here the module can define the js and css required for portal_features/some-functionality, and the project can declare
+that portals/main uses it.
 
 ## Getting the Portal Manager
 ```php

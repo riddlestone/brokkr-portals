@@ -1,7 +1,8 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test;
+namespace Riddlestone\Brokkr\Portals\Test\Unit;
 
+use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use Riddlestone\Brokkr\Portals\ConfigProviderInterface;
 use Riddlestone\Brokkr\Portals\PortalManager;
@@ -16,7 +17,8 @@ class PortalManagerTest extends TestCase
         $provider2 = $this->createMock(ConfigProviderInterface::class);
         $provider2->method('getPortalNames')->willReturn(['main', 'special']);
 
-        $portalManager = new PortalManager();
+        $serviceManager = $this->createMock(ServiceManager::class);
+        $portalManager = new PortalManager($serviceManager);
         $portalManager->addPortalConfigProvider($provider);
         $portalManager->addPortalConfigProvider($provider2);
 
@@ -121,9 +123,32 @@ class PortalManagerTest extends TestCase
 
     public function testSetPortal()
     {
-        $portalManager = new PortalManager();
+        $serviceManager = $this->createMock(ServiceManager::class);
+        $portalManager = new PortalManager($serviceManager);
         $this->assertEquals('main', $portalManager->getCurrentPortalName());
         $portalManager->setCurrentPortalName('admin');
         $this->assertEquals('admin', $portalManager->getCurrentPortalName());
+    }
+
+    public function testConfigure()
+    {
+        $serviceManager = $this->createMock(ServiceManager::class);
+        $portalManager = new PortalManager($serviceManager);
+        $this->assertEmpty($portalManager->getPortalNames());
+        $portalManager->configure(
+            [
+                PortalManager::PROVIDER_NAMES_CONFIG_KEY => [
+                    'mock',
+                ],
+                'factories' => [
+                    'mock' => function () {
+                        $mock = $this->createMock(ConfigProviderInterface::class);
+                        $mock->method('getPortalNames')->willReturn(['main']);
+                        return $mock;
+                    },
+                ],
+            ]
+        );
+        $this->assertEquals(['main'], $portalManager->getPortalNames());
     }
 }

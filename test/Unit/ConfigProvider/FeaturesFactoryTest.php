@@ -1,12 +1,13 @@
 <?php
 
-namespace Riddlestone\Brokkr\Portals\Test\ConfigProvider;
+namespace Riddlestone\Brokkr\Portals\Test\Unit\ConfigProvider;
 
 use Exception;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Riddlestone\Brokkr\Portals\ConfigProvider\Features;
 use Riddlestone\Brokkr\Portals\ConfigProvider\FeaturesFactory;
@@ -25,6 +26,7 @@ class FeaturesFactoryTest extends TestCase
         $portalManager = $this->createMock(PortalManager::class);
         $featureManager = $this->createMock(FeatureManager::class);
 
+        /** @var MockObject&ContainerInterface $container */
         $container = $this->createMock(ContainerInterface::class);
         $container->method('get')
             ->willReturnCallback(function ($id) use ($portalManager, $featureManager) {

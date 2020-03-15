@@ -3,25 +3,78 @@
 namespace Riddlestone\Brokkr\Portals;
 
 use Laminas\Config\Config;
+use Laminas\ServiceManager\AbstractPluginManager;
 
-class PortalManager
+class PortalManager extends AbstractPluginManager
 {
+    const PROVIDER_NAMES_CONFIG_KEY = 'provider_names';
+
+    /**
+     * An object type that the created instance must be instanced of
+     *
+     * @var null|string
+     */
+    protected $instanceOf = ConfigProviderInterface::class;
+
     /**
      * @var string
      */
     protected $currentPortalName = 'main';
 
     /**
-     * @var ConfigProviderInterface[]
+     * @var string[]
      */
-    protected $portalConfigProviders = [];
+    protected $providerNames = [];
 
     /**
-     * @param ConfigProviderInterface $configPortalProvider
+     * @return string[]
      */
-    public function addPortalConfigProvider(ConfigProviderInterface $configPortalProvider)
+    protected function getProviderNames(): array
     {
-        $this->portalConfigProviders[] = $configPortalProvider;
+        return $this->providerNames;
+    }
+
+    /**
+     * @return ConfigProviderInterface[]
+     */
+    protected function getProviders(): array
+    {
+        return array_map([$this, 'get'], $this->getProviderNames());
+    }
+
+    /**
+     * @param string $providerName
+     */
+    public function addProviderName(string $providerName): void
+    {
+        if (!in_array($providerName, $this->providerNames)) {
+            $this->providerNames[] = $providerName;
+        }
+    }
+
+    /**
+     * Override configure() to record provider names list.
+     *
+     * {@inheritDoc}
+     */
+    public function configure(array $config)
+    {
+        if (isset($config[self::PROVIDER_NAMES_CONFIG_KEY])) {
+            foreach ($config[self::PROVIDER_NAMES_CONFIG_KEY] as $providerName) {
+                $this->addProviderName($providerName);
+            }
+        }
+
+        return parent::configure($config);
+    }
+
+    /**
+     * @param ConfigProviderInterface $provider
+     */
+    public function addPortalConfigProvider(ConfigProviderInterface $provider): void
+    {
+        $this->addProviderName(spl_object_hash($provider));
+        $this->setService(spl_object_hash($provider), $provider);
     }
 
     /**
@@ -32,9 +85,9 @@ class PortalManager
     public function getPortalNames(): array
     {
         $portals = [];
-        foreach($this->portalConfigProviders as $provider) {
-            foreach($provider->getPortalNames() as $portalName) {
-                if(!in_array($portalName, $portals)) {
+        foreach ($this->getProviders() as $provider) {
+            foreach ($provider->getPortalNames() as $portalName) {
+                if (!in_array($portalName, $portals)) {
                     $portals[] = $portalName;
                 }
             }
@@ -79,7 +132,7 @@ class PortalManager
     public function getPortalConfig(string $name, ?string $configKey = null): array
     {
         $config = new Config([]);
-        foreach($this->portalConfigProviders as $provider) {
+        foreach ($this->getProviders() as $provider) {
             if ($provider->hasConfiguration($name, $configKey)) {
                 $config->merge(new Config($provider->getConfiguration($name, $configKey)));
             }
