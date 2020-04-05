@@ -27,72 +27,84 @@ class PortalManagerTest extends TestCase
 
     public function testGetPortalConfig()
     {
-        $portalManager = new PortalManager();
-
-        $provider1 = $this->createMock(ConfigProviderInterface::class);
-        $provider1->method('getPortalNames')->willReturn(['main']);
-        $provider1->method('hasConfiguration')
-            ->willReturnCallback(function ($portalName, $key) {
-                if ($portalName != 'main') {
-                    return false;
-                }
-                $data = ['css', 'js'];
-                if ($key === null) {
-                    return true;
-                }
-                if (in_array($key, $data)) {
-                    return true;
-                }
-                return false;
-            });
-        $provider1->method('getConfiguration')
-            ->willReturnCallback(function ($portalName, $key) {
-                if ($portalName != 'main') {
-                    return [];
-                }
-                $data = ['css' => ['styles.css'], 'js' => ['scripts.js']];
-                if ($key === null) {
-                    return $data;
-                }
-                if (isset($data[$key])) {
-                    return $data[$key];
-                }
-                return [];
-            });
-
-        $provider2 = $this->createMock(ConfigProviderInterface::class);
-        $provider2->method('getPortalNames')->willReturn(['main']);
-        $provider2->method('hasConfiguration')
-            ->willReturnCallback(function ($portalName, $key) {
-                if ($portalName != 'main') {
-                    return false;
-                }
-                $data = ['css'];
-                if ($key === null) {
-                    return true;
-                }
-                if (in_array($key, $data)) {
-                    return true;
-                }
-                return false;
-            });
-        $provider2->method('getConfiguration')
-            ->willReturnCallback(function ($portalName, $key) {
-                if ($portalName != 'main') {
-                    return [];
-                }
-                $data = ['css' => ['more-styles.css']];
-                if ($key === null) {
-                    return $data;
-                }
-                if (isset($data[$key])) {
-                    return $data[$key];
-                }
-                return [];
-            });
-
-        $portalManager->addPortalConfigProvider($provider1);
-        $portalManager->addPortalConfigProvider($provider2);
+        $serviceManager = $this->createMock(ServiceManager::class);
+        $portalManager = new PortalManager($serviceManager);
+        $portalManager->configure(
+            [
+                PortalManager::PROVIDER_NAMES_CONFIG_KEY => [
+                    'provider1',
+                    'provider2',
+                ],
+                'factories' => [
+                    'provider1' => function () {
+                        $provider1 = $this->createMock(ConfigProviderInterface::class);
+                        $provider1->method('getPortalNames')->willReturn(['main']);
+                        $provider1->method('hasConfiguration')
+                            ->willReturnCallback(function ($portalName, $key) {
+                                if ($portalName != 'main') {
+                                    return false;
+                                }
+                                $data = ['css', 'js'];
+                                if ($key === null) {
+                                    return true;
+                                }
+                                if (in_array($key, $data)) {
+                                    return true;
+                                }
+                                return false;
+                            });
+                        $provider1->method('getConfiguration')
+                            ->willReturnCallback(function ($portalName, $key) {
+                                if ($portalName != 'main') {
+                                    return [];
+                                }
+                                $data = ['css' => ['styles.css'], 'js' => ['scripts.js']];
+                                if ($key === null) {
+                                    return $data;
+                                }
+                                if (isset($data[$key])) {
+                                    return $data[$key];
+                                }
+                                return [];
+                            });
+                        return $provider1;
+                    },
+                    'provider2' => function () {
+                        $provider2 = $this->createMock(ConfigProviderInterface::class);
+                        $provider2->method('getPortalNames')->willReturn(['main']);
+                        $provider2->method('hasConfiguration')
+                            ->willReturnCallback(function ($portalName, $key) {
+                                if ($portalName != 'main') {
+                                    return false;
+                                }
+                                $data = ['css'];
+                                if ($key === null) {
+                                    return true;
+                                }
+                                if (in_array($key, $data)) {
+                                    return true;
+                                }
+                                return false;
+                            });
+                        $provider2->method('getConfiguration')
+                            ->willReturnCallback(function ($portalName, $key) {
+                                if ($portalName != 'main') {
+                                    return [];
+                                }
+                                $data = ['css' => ['more-styles.css']];
+                                if ($key === null) {
+                                    return $data;
+                                }
+                                if (isset($data[$key])) {
+                                    return $data[$key];
+                                }
+                                return [];
+                            });
+                        return $provider2;
+                    },
+                ],
+            ]
+        );
 
         $this->assertTrue($portalManager->hasPortalConfig('main'));
         $this->assertTrue($portalManager->hasPortalConfig('main', 'css'));
