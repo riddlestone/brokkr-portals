@@ -52,8 +52,17 @@ $portalManager = $serviceManager->get(\Riddlestone\Brokkr\Portals\PortalManager:
 # get a list of portals
 $portals = $portalManager->getPortalNames();
 
+# set the current portal
+$portalManager->setCurrentPortalName('main');
+
 # get the current portal name
-$portal = $portalManager->getCurrentPortalName();
+$portalName = $portalManager->getCurrentPortalName();
+
+# check a portal has config
+$hasConfig = $portalManager->hasPortalConfig('main', 'css');
+
+# check the current portal has config
+$hasConfig = $portalManager->hasCurrentPortalConfig('css');
 
 # get the config for a portal
 $portalConfig = $portalManager->getPortalConfig('main', 'css');
