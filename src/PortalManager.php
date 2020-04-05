@@ -114,7 +114,7 @@ class PortalManager extends AbstractPluginManager
      */
     public function hasPortalConfig(string $name, ?string $configKey = null): bool
     {
-        foreach($this->portalConfigProviders as $provider) {
+        foreach ($this->getProviders() as $provider) {
             if ($provider->hasConfiguration($name, $configKey)) {
                 return true;
             }
