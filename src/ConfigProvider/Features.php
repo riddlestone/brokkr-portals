@@ -80,7 +80,7 @@ class Features implements ConfigProviderInterface
         }
 
         // get the list of features for the portal
-        $features = $this->getPortalManager()->getPortalConfig($portalName, 'features');
+        $features = $this->getPortalFeatures($portalName);
 
         foreach($features as $feature) {
             if($this->getFeatureManager()->hasFeature($feature, $configKey)) {
@@ -101,7 +101,7 @@ class Features implements ConfigProviderInterface
             return [];
         }
 
-        $features = $this->getPortalManager()->getPortalConfig($portalName, 'features');
+        $features = $this->getPortalFeatures($portalName);
         $config = new Config([]);
 
         foreach($features as $feature) {
@@ -109,5 +109,40 @@ class Features implements ConfigProviderInterface
         }
 
         return $config->toArray();
+    }
+
+    /**
+     * Recursively get all portal features
+     *
+     * @param string $portalName
+     * @return string[]
+     * @throws Exception
+     */
+    public function getPortalFeatures(string $portalName): array
+    {
+        $features = [];
+        foreach ($this->getPortalManager()->getPortalConfig($portalName, 'features') as $feature) {
+            $features = array_merge($features, $this->getFeatureFeatures($feature));
+        }
+        return array_unique($features);
+    }
+
+    /**
+     * Recursively get all features a named feature depends on
+     *
+     * @param string $featureName
+     * @return string[]
+     * @throws Exception
+     */
+    public function getFeatureFeatures(string $featureName): array
+    {
+        $features = [];
+        if ($this->getFeatureManager()->hasFeature($featureName, 'features')) {
+            foreach ($this->getFeatureManager()->getFeature($featureName, 'features') as $requiredFeature) {
+                $features = array_merge($features, $this->getFeatureFeatures($requiredFeature));
+            }
+        }
+        $features[] = $featureName;
+        return array_unique($features);
     }
 }
